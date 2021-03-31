@@ -1,0 +1,3 @@
+wnat want
+tru true
+fnd find
