@@ -153,9 +153,8 @@ while True:
                 print('IMDBot: Sorry, I don\'t know which movie you\'re asking about. Try to ask me to find a movie :)')
 
         else:
-            #print("ELSE")
-            bot.get_response(raw_user_input)
-            #print("IMDBot: I'm sorry. Something went wrong. Can you try to ask that again in another way?")
+            #bot.get_response(raw_user_input)
+            print("IMDBot: I'm sorry. Something went wrong. Can you try to ask that again in another way?")
 
     except(KeyboardInterrupt, EOFError, SystemExit) as e: #end conversation in case of fatal error or user inputs ctrl+c
         break
