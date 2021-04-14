@@ -59,9 +59,9 @@ def fixSentence(sentence, entityArray):
     if punctuation != None:
         newsentence += punctuation
 
-    if mistakeFound == True:
-        print("IMDBot: ----- Spelling error found, below is the fixed sentence -----")
-        print("IMDBot: " + newsentence)
+    # if mistakeFound == True:
+    #     print("IMDBot: ----- Spelling error found, below is the fixed sentence -----")
+    #     print("IMDBot: " + newsentence)
 
     return newsentence
 

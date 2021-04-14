@@ -1,13 +1,14 @@
 import imdb
 import synonyms as sy
+import twitter as tw
 
 ia = imdb.IMDb() # Initializes the IMDb integration through an IMDbPy method
 
 def findMovie(userName): # Finds the movie requested by the user
     print('IMDBot: Which movie would you like to know about?')
     search = input(f'{userName}: ')
-    movie = searchForMovie(userName, search)
-    if movie == '':
+    movie = searchForMovie(userName, search) # movie = movie object if it was successfully found, otherwise movie = ''
+    if movie == '': 
         print(f'IMDBot: Ok. What else can I help you with?')
         return ''
     else: 
@@ -122,15 +123,15 @@ def runtime(movie):
     return runtime
 
 # This is for checking which actor played a CHARACTER in a MOVIE
-def whoPlayed(userName, oldMovie, charName, newMovie_name):
+def whoPlayed(twAPI, userName, oldMovie, charName, newMovie_name):
     try:
         movie = '' # Variable to hold movie id of the one to look for the character in
-        if(oldMovie == ''):
+        if(oldMovie == ''): # If there was no movie in locals(), then need to search for the new movie
             print(f'IMDBot: Before I can see who played {charName} in {newMovie_name}, I need to confirm the movie.')
-            movie = searchForMovie(userName, newMovie_name)
+            movie = searchForMovie(userName, newMovie_name) # will return movie object if successfully found. Otherwise, ''
             if (movie == ''): # will only be '' if user said to stop searching
                 return 'User cancel'
-        else:
+        else: # If there was a movie in locals, it was passed in oldMovie
             oldMovie_name = oldMovie['title']
             if (newMovie_name == '' or (newMovie_name == oldMovie_name)):
                 movie = oldMovie # check using the old movie because we already have the movie ID
@@ -143,7 +144,7 @@ def whoPlayed(userName, oldMovie, charName, newMovie_name):
                     sCheckArr = sy.getArray(searchCheck, []) # Turn user input into array for synonym checking
                     if (sCheckFirst == 'y' or sy.findSyns(sCheckArr, 'yes') == 0): # If the user does want to search for the new movie name
                         movie = searchForMovie(userName, newMovie_name)
-                        if (movie == ''): # movie will only return blank if the user said to stop searching
+                        if movie == '': # movie will only return blank if the user said to stop searching
                             return 'User cancel'
                         break
                     elif (sCheckFirst == 'n' or sy.findSyns(sCheckArr, 'no') == 0): # If the user does not want to search for the new movie name
@@ -152,8 +153,7 @@ def whoPlayed(userName, oldMovie, charName, newMovie_name):
                         break
                     else:
                         print(f'IMDBot: I\'m sorry, I don\'t understand. ')
-                
-        title = movie['title']
+        title = movie['title']        
         print(f'IMDBot: Ok. Let me see...') #buffer while the bot searches
         castID = 0
         while (castID < len(movie['cast'])):
@@ -161,7 +161,7 @@ def whoPlayed(userName, oldMovie, charName, newMovie_name):
             actor = movie['cast'][castID]
             if (str(character).lower().find(charName.lower()) != -1): #compares the role and the string in lowercase to compare
                 print(f'IMDBot: {character} is played by {actor}')
-                print(f'IMDBot: What would you like to know about {actor}?')
+                tw.printLatestTweet(twAPI, actor, userName) # Twitter API - search for last tweet by that actor about this movie
                 return actor
             else:
                 castID += 1
