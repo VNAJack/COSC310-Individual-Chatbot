@@ -27,6 +27,7 @@ def trainSpacy(): # This is called in ner.py only. DO NOT call it elsewhere.
         ("My name is Francisco", {"entities": [(11, 20, "PERSON")]}),
         ("My name is Joel", {"entities": [(11, 15, "PERSON")]}),
         ("Who played Neo in The Matrix?", {"entities": [(11, 14, "PERSON"), (18, 28, "WORK_OF_ART")]}),
+        ("who played Thor in Thor: Ragnarok?", {"entities": [(11, 15, "PERSON"), (19, 33, "WORK_OF_ART")]}),
         ("Who played Wanda Maximoff in The Avengers?", {"entities": [(11, 25, "PERSON"), (29, 41, "WORK_OF_ART")]}),
         ("Who played Wanda in WandaVision?", {"entities": [(11, 16, "PERSON"), (20, 31, "WORK_OF_ART")]}),
         ("Who played Vision in The Avengers?", {"entities": [(11, 17, "PERSON"), (21, 33, "WORK_OF_ART")]}),
@@ -38,6 +39,11 @@ def trainSpacy(): # This is called in ner.py only. DO NOT call it elsewhere.
         ("Who played Obi-Wan Kenobi in Star Wars: Episode I - The Phantom Menace?", {"entities": [(11, 25, "PERSON"), (29, 70, "WORK_OF_ART")]}),
         ("Who played Yoda in Star Wars: Episode II - Attack of the Clones?", {"entities": [(11, 15, "PERSON"), (19, 63, "WORK_OF_ART")]}),
         ("Who played Supreme Chancellor Palpatine in Star Wars: Episode III - Revenge of the Sith?", {"entities": [(11, 39, "PERSON"), (43, 87, "WORK_OF_ART")]}),
+        ("who played Miles in that movie?", {"entities": [(11, 16, "PERSON")]}),
+        ("who played Nash?", {"entities": [(11, 15, "PERSON")]}),
+        ("who played Cobb?", {"entities": [(11, 15, "PERSON")]}),
+        ("Who voiced Elsa in Frozen?", {"entities": [(11, 15, "PERSON"), (19, 25, "WORK_OF_ART")]}),
+        ("Who voiced Honeymaren in Frozen II?", {"entities": [(11, 21, "PERSON"), (25, 34, "WORK_OF_ART")]}),
         ("Which character did Mark Hamill play in Star Wars: Episode IV - A New Hope?", {"entities": [(20, 31, "PERSON"), (40, 74, "WORK_OF_ART")]}),
         ("Which character did Peter Mayhew play in Star Wars: Episode V - The Empire Strikes Back?", {"entities": [(20, 32, "PERSON"), (41, 87, "WORK_OF_ART")]}),
         ("Which character did Kenny Baker play in Star Wars: Episode VI - Return of the Jedi?", {"entities": [(20, 31, "PERSON"), (40, 82, "WORK_OF_ART")]}),
@@ -111,7 +117,13 @@ def trainSpacy(): # This is called in ner.py only. DO NOT call it elsewhere.
         ("Give me the bio of Leonardo DiCaprio", {"entities": [(19, 36, "PERSON")]}),
         ("Give me the bio of Joseph Gordon-Levitt", {"entities": [(19, 39, "PERSON")]}),
         ("What is the bio of Elliot Page?", {"entities": [(19, 30, "PERSON")]}),
-        ("What is the bio of Michael Caine?", {"entities": [(19, 32, "PERSON")]})
+        ("What is the bio of Michael Caine?", {"entities": [(19, 32, "PERSON")]}),
+        ("Can you please enable Twitter?", {"entities": []}),
+        ("enable Twitter", {"entities": []}),
+        ("Disable Twitter", {"entities": []}),
+        ("What is Kristen Bell's latest tweet?", {"entities": [(8, 20, "PERSON")]}),
+        ("What is Jonathon Groff's latest tweet?", {"entities": [(8, 22, "PERSON")]}),
+        ("What did Josh Gad tweet last?", {"entities": [(9, 17, "PERSON")]})
     ]
 
     # Use the internal training API and run randomized training loop

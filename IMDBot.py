@@ -7,7 +7,7 @@ import ner
 import spellinghandler as sp
 import synonyms as sy
 import postagging as pt
-import twit as tw
+import twitter as tw
 from chatterbot import ChatBot
 
 bot = ChatBot('MovieBot')
@@ -19,14 +19,14 @@ print(f'IMDBOT: I just want to make sure I have your name right.')
 userName = u.checkName(userName) #check username if correct. method can also be used if user wants to change their username
 print(f'I am a bot who knows all about movies. ') #concatenates to "IMDBot: That's a cool name, userName! "
 
-# bot asks user for permission and assistance with authenticating APIs. User can decline, but the APIs enhance the experience.
-twAPI = tw.enableTwitter(userName)
+# bot asks user for permission and assistance with authenticating APIs. User can decline.
+twAPI = tw.enableTwitter(userName) # if enabled, twAPI is an object, otherwise twAPI = '' 
 
 # Once APIs are done, can use the bot as intended
 print(f'IMDBot: Now that everything is set up, how can I help you today? ')
 while True:
     try:
-        raw_user_input = input(f'{userName}: ') #collect user input for this iteration.
+        raw_user_input = input(f'{userName}: ') # collect user input for this iteration
         # Process user input
         entities = ner.listEntities(raw_user_input) # named entity recognition
         movie_name = ner.getMovieName(raw_user_input) # save movie name from ner, if any
@@ -36,20 +36,20 @@ while True:
         tagged = pt.getPosSentenceEntity(user_input,entities) # get the Part of speech of the spell checked sentence in the form of arrays containing tuples
         user_input = sy.getArray(user_input, entities) # User input is now an array. To look for keywords: if 'keyword' in user_input
 
+        # Make input (not including entities) lowercase
         for i in range (len(user_input)):
             user_input[i] = user_input[i].lower()
         
-        if ('bye' in user_input or sy.findSyns(user_input, 'goodbye') == 0): #end conversation if user says bye
-            break
-        
-        # If Twitter was not authorized on startup but user changed their mind and wants to authorize Twitter
-        if(('use' in user_input) and ('twitter' in user_input) and (tw.twitter_enabled == False)):
-            tw.enableTwitter(userName)
-            
-        # User can change the subject
-        elif ('nevermind' in user_input):
-            print(f'IMDBot: Ok. How can I help?')
+        # Enable Twitter. If Twitter was not authorized on startup, but the user changed their mind and wants to authorize Twitter
+        if(('enable' in user_input) and ('twitter' in user_input) and (twAPI == '')):
+            twAPI = tw.enableTwitter(userName)
+            print(f'IMDBot: Now, how can I help?')
 
+        # Disable Twitter. Twitter is already enabled, but the user wants to disable Twitter
+        if(('disable' in user_input) and ('twitter' in user_input) and (twAPI != '')):
+            twAPI = '' # need the API object to do anything. Without it, no Twitter API actions can be performed
+            print('IMDBot: Twitter is now disabled. If you would like to re-enable it, please ask me to \'Enable Twitter\'')
+        
         # Find a movie or find another movie
         elif ((sy.findSyns(user_input, 'find') == 0 or sy.findSyns(user_input, 'search') == 0) and ('another' in user_input or sy.findSyns(user_input, 'movie') == 0)): # pick the movie to talk about
             movie = f.findMovie(userName)
@@ -58,6 +58,7 @@ while True:
         elif (sy.findSyns(user_input, 'director') == 0 or sy.findSyns(user_input, 'directed') == 0): #find the director of the movie we're talking about and store as object for follow up questions about them
             if 'movie' in locals(): # check if a movie object is already saved (a movie is being spoken about)
                 person = f.findDirector(movie)
+                tw.printLatestTweet(twAPI, person['name'])
             else:
                 print('IMDBot: Sorry, I don\'t know which movie you\'re asking about to find the director. Try to ask me to find a movie :)') # if a movie is not being currently discussed, tell user it doesn't understand 
         
@@ -69,13 +70,27 @@ while True:
                 print('IMDBot: Sorry, I don\'t know which movie you\'re asking about to list the characters. Try to ask me to find a movie first!')
         
         # Find the actor who played a character
-        elif (('who' in user_input) and ('played' in user_input) or ('voiced' in user_input)):
-            if 'movie' in locals():
-                person = f.whoPlayed(userName, movie, person_name, movie_name)
+        elif (('who' in user_input) and (('played' in user_input) or ('voiced' in user_input)) and (person_name != '')):
+            if 'movie' in locals(): # If there's already a movie object (previously searched for a movie)
+                person = f.whoPlayed(twAPI, userName, movie, person_name, movie_name)
+            elif movie_name != '': # If the user is asking who played {character} in {movie_name} then we have a movie name to use
+                person = f.whoPlayed(twAPI, userName, '', person_name, movie_name)
+            else: # Don't know which movie they're asking to search for the character in
+                print(f'IMDBot: I\'m sorry. To look for {person_name} I need to know which movie you\'re asking about.')
+
+        # User asks about the person's latest tweet
+        elif(('latest' in user_input) and ('tweet' in user_input)):
+            if(twAPI == ''):
+                print(f'IMDBot: Twitter is not enabled. Please ask me to \'enable Twitter\'.')
             else:
-                person = f.whoPlayed(userName, '', person_name, movie_name)
-        
-        # User can change their username
+                if 'person' in locals() and person_name == '': # if there is already a person object in locals (a person was already searched for) and that is the only name mentioned
+                    tw.printLatestTweet(twAPI, person['name'], userName) # prints the latest tweet and asks user if they want to like it if they haven't already
+                elif(person_name != ''): # if the user asked "What is {person_name}'s latest tweet?" then this name is the one to use to search
+                    tw.printLatestTweet(twAPI, person_name, userName) # prints the latest tweet and asks user if they want to like it if they haven't already
+                else: # no person or name, so can't look up the latest tweet without knowing the person
+                    print(f'IMDBot: I\'m sorry. I don\'t know who you\'re asking about.')
+
+        # User can change theitweet_objrname
         elif (sy.findSyns(user_input, 'change') == 0 and ('name' in user_input or 'username' in user_input)):
             userName = u.checkName(userName)
             print('How can I help you?') #concatenates to "IMDBot: That's a cool name, userName! "
@@ -89,7 +104,7 @@ while True:
             else:
                 print("IMDBot: Sorry I am not sure how to help with that.")
         
-        # What is the peron's birthday
+        # What is the person's birthday
         elif(sy.findSyns(user_input, 'birthday') == 0 or ('when' in user_input and sy.findSyns(user_input, 'born') == 0)):
             #Call giveBio() from person.py
             #Search for birthday/birthdate
@@ -138,7 +153,7 @@ while True:
                 print("IMDBot: I\'m not sure who you\'re asking about.")
             print("IMDBot: What else would you like to know?")
         
-        # Check if a person worked on a movie
+        # Check if a person was in a movie
         elif((('check' and 'if' and 'in') in user_input) and (person_name != '') and (movie_name != '')):
             #Check if a {actor} is in {movie}
             if 'movie' in locals():
@@ -182,11 +197,18 @@ while True:
             else:
                 print('IMDBot: Sorry, I don\'t know which movie you\'re asking about. Try to ask me to find a movie :)')
 
+        # User can change the subject
+        elif ('nevermind' in user_input):
+            print(f'IMDBot: Ok. How can I help?')
+
+        # User can end the conversation by saying 'bye'
+        elif ('bye' in user_input or sy.findSyns(user_input, 'goodbye') == 0): #end conversation if user says bye
+            print('\nIMDBot: Goodbye! It was nice talking to you ' + userName)
+            quit()
+
         else:
-            #print("ELSE")
             #bot.get_response(raw_user_input)
             print("IMDBot: I'm sorry. Something went wrong. Can you try to ask that again in another way?")
 
     except(KeyboardInterrupt, EOFError, SystemExit) as e: #end conversation in case of fatal error or user inputs ctrl+c
         break
-print('\nIMDBot: Goodbye! It was nice talking to you ' + userName)

@@ -10,7 +10,7 @@ from spacy.language import Language
 import time
 
 # TODO: DELETE LATER. FOR TESTING ONLY
-print("Loading spaCy...")
+print("Loading...")
 t0 = time.time()
 
 # Load pre-existing spacy model and train it. This will take a few seconds. Calls from nerTrainer.py
