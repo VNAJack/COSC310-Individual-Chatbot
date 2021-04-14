@@ -1,39 +1,48 @@
 # **Movie Chat Bot**
 
-COSC 310 Assignment **3** - Group 4
+## COSC 310 Final Project (Individual Assignment)
 
-*This repository is a copied and updated version of the original with the change history and files preserved for refactoring*
+Per the Final Project description, Assignment 3 was imported to this repository for the purpose of individual work.
+
+To identify sections that were added for this project, I have added the note *(Final Project)* throughout this README file.
+
+Other parts of the project were changed for this project for the purpose of integration, smoother conversation, and error handling and are documented within the code's comments.
 
 ## Table of Contents
 * [General Information](#general-information)
 * [Language and Modules](#language-and-modules)
 * [Setup](#setup)
 * [Classes](#classes)
-  - [Main Class](#main-class)
-  - [Commands and IMDbPy integration](#commands-and-imdbpy-integration)
-  - [Natural Language Processing](#natural-language-processing)
-  - [Testing](#testing)
-  - [GUI](#gui)
-* [Possible Improvements](#possible-improvements)
+  - [Main Class](#main-class) (A3 + Final Project)
+  - [Commands and IMDbPy integration](#commands-and-imdbpy-integration) (A3 only)
+  - [Natural Language Processing](#natural-language-processing) (A3 only)
+  - [Testing](#testing) (A3 only)
+  - [GUI](#gui) (A3 only)
+  - [Twitter API](#twitter-api) (Final Project)
+  - [Google Feed API](#google-feed-api) (Final Project)
+* [Areas of Improvement](#possible-improvements)
 
 
 ## General Information
 
-For this project, we created a responsive and interactive chatbot using Python where the chatbot takes on the role of a friend who is very knowledgeable about movies. The chatbot utilizes the IMDbPY library, but the program is designed for the future implementation of a custom API integration as well as a natural language processing library. The current library allows for the chatbot to create connections between different movie attributes and elements such as movie titles, actors, directors, etc. Ultimately, the user can discuss movies with the chatbot and expect to receive information about the movies being asked as well as certain actors, characters, crew members, and directors.
+This project has resulted in the creation of a responsive and interactive chatbot named IMDBot using Python. IMDBot takes on the role of a friend who is very knowledgeable about movies and utilizes the following libraries: IMDbPY, spaCy, nltk, pyspellchecker, chatterbot, Tweepy, and _____ TODO: GOOGLE FEED. With these libraries IMDBot can answer questions about movies, actors, directors, and production companies.
 
 ## Language and Modules
 
-- Python 3.6
+- Python 3.6.5
 - IMDbPY Library
 - nltk 3.4.4
 - spaCy 3.0.5 **with** Pipelines en_core_web_sm 3.0.0
 - pyspellchecker 0.6.1 
 - chatterbot 1.0.2
-
+- tweepy 3.10.0 *(Final Project)*
+- TODO: GOOGLE FEED *(Final Project)*
 
 ## Setup
 
-1. In order to use this code to its full extent, ensure you have the required libraries installed, you can do this through pip and python by running
+1. In order to use this code to its full extent, please ensure you have Python 3.6.5 installed. Not all libraries are compatible with other versions of Python. It is recommended to create a separate environment to avoid Python version issues.
+
+2. Ensure you have all of the required libraries installed. You can do this through pip and Python by running the following:
 
 > $ pip install IMDBPy 
 
@@ -51,56 +60,73 @@ For this project, we created a responsive and interactive chatbot using Python w
 
 > $ pip install chatterbot-corpus (Optional; See chatterTrainer.py under [Trainers/Utility](#trainers/utility))
 
-We need to also download the corpus necessary for our NLP and program to run. To do this:
-> Make sure to "$ pip install nltk" beforehand
-> Open python shell
-> ">>> import nltk"
-> ">>> nltk.download()"
-> A new window will open. Under the menu "CORPORA", scroll to find "wordnet", and finally press "download"
-> ">>> nltk.download('punkt')"
-> ">>> nltk.download('averaged_perceptron_tagger')"
+> $ pip install tweepy
 
-2. Make sure the code will be running on the file directory. To make sure you have it running on the directory, do the following:
+> $ pip install TODO: GOOGLE FEED
 
-> go to settings or (shortcut: ctrl+, )
-> type "execute in file dir"
-> The first setting right underneath the searchbox should contain a checkbox that says "When executing a file in terminal, whether to use execute the file's directory, instead of the current open folder". 
-> Check the box 
+3. Download the necessary corpora, and then exit the interpreter using the following steps:
 
-3. In order to run the bot, use the following command from within the project main directory.
+> $ Python
+
+> *>>>* import nltk
+
+> *>>>* nltk.download('wordnet')
+
+> *>>>* nltk.download('punkt')
+
+> *>>>* nltk.download('averaged_perceptron_tagger')
+
+> *>>>* exit()
+
+4. Make sure the code will be running on the file directory. If using Visual Studio Code, you can ensure you have it running on the directory with these steps:
+    - Go to settings or use the shortcut: ctrl + ,
+    - Type "execute in file dir"
+    - Check the box for "When executing a file in terminal, whether to use execute the file's directory, instead of the current open folder"
+
+5. Run the bot using the following command from within the project's main directory.
 
 > $ python IMDBot.py
 
-
 ## Classes
 
-The project has two distinct parts that make it work:
+__Assignment 3 Description:__
+
+The project has two core parts that make it work:
 
 1. The IMDb integration and the functions that allow the bot to output the requested information 
 2. The classes that handle natural language processing and allow the bot to better understand the user's inputs
 
-To see the class structure of the IMDb integration, take a look at the [UML Diagram](https://lucid.app/publicSegments/view/aebe824d-31ce-4685-9720-e142ce18f0fb/image.pdf)
+To see the class structure of the IMDb integration, take a look at the [Assignment 3 UML Diagram](https://lucid.app/publicSegments/view/aebe824d-31ce-4685-9720-e142ce18f0fb/image.pdf)
+
+__Final Project Description:__
+
+  The project's core parts are still the same; however, the project has grown with the integration of the Twitter and Google News Feed APIs.
 
 ### Main Class
 
 #### IMDBot.py
 
- - This is the main file you run for the bot, it contains the command words and calls the functions that they reference.
- - This class inherits the other four.
- - A limitation of this class for now is that many of the commands are hard coded so errors in spelling or incorrect inputs will not be understood.
- - The class does ensure that any major exceptions are handled gracefully, and quick ctrl+c shutdown has also been implemented.
+ - The main file the user runs, as it contains the conversation loop and if-statements that look for key words from the user
+ - Inherits the other classes
+ - Handles major exceptions are handled gracefully, and quick ctrl+c shutdown has also been implemented.
+ - Changes and additions were made for this project *(Final Project)*
 
 ### Commands and IMDbPy integration
 
 #### user.py
 
-- This class gets the name of the current user for use in the interface.
-- It also allows the user to change their name if requested.
+- Requests the name of the current user so that IMDBot can refer to the user by the specified name and for interface use.
+- Lets the user change their name upon request
 
 #### film.py
 
-- This class handles information about a certain movie and also creates a movie object with all of it's attributes being information about the selected movie.
-- This class can find the director of a movie, the characters, whether someone  worked in a movie, and a summary of it.
+- Uses the IMDbPY library to
+  - find a movie based on the movie title provided by the user
+  - find the main director of a movie
+  - provide a summary of a movie
+  - list the characters of a movie
+  - provide the runtime of a movie
+  - find which actor played a specific character in a movie -- [twitter.py](#twitter.py) is incorporated to enhance the search experience. *(Final Project)*
 
 #### person.py
 
@@ -156,8 +182,31 @@ To see the class structure of the IMDb integration, take a look at the [UML Diag
 - This GUI is more of a proof of concept, as time constraints prevented implementation to the main runtime.
 - It can be run to see what it would look like, but chatbot interaction is nonfunctional
 
+### Twitter API
+#### twitter.py
+*(Final Project)*
+- Before the Twitter API can be used, `enableTwitter()` is called on startup to ask for the user's permission to connect to their Twitter account.
+  - If the user denies this request, then the Twitter API functionality is disabled
+  - If the user approves this request, then `authenticateTwitter()` is used to provide instructions and open a web page where the user can (a) read more details about the permission, and (b) authorize or cancel the process
+  - The user can enable or disable the Twitter API at any time using the key words "enable Twitter" or "disable Twitter" in their conversation with IMDBot, so the user has full control over the bot's connection to their Twitter account.
+- Functions:
+  - `findUser()` Finds the Twitter account of a famous person based on the name provided by the user or from the name of an actor or director that was found with IMDbPY. It then prints the Twitter Handle of the account that was found to be associated with the name.
+  - `getLatestTweet()` Finds the latest tweet of the found Twitter account
+  - `printTweet()` Prints the latest tweet to the console and presents the tweet's URL
+  - `askToLikeTweet()` Asks the user if they want to 'like' the tweet if it is not already 'liked'
+  - `printLatestTweet()` is the function used in [IMDBot.py](#IMDBot.py) and [film.py](#film.py). It calls upon the above functions in order and uses appropriate error handling.
+- The latest tweet by an actor or director is found and printed when:
+  - specifically requested by the user in their conversation with IMDBot (i.e. "What is [actor-name]'s latest tweet?")
+  - the user searches for an actor or director (i.e. "Who played [character-name] in [movie-title]?")
 
-## Possible Improvements
+
+### Google Feed API
+
+#### google-feed.py
+*(Final Project)*
+- notes here
+
+## Areas of Improvement
 
 - GUI implementation
 - Larger corpora for the trainers
