@@ -147,13 +147,18 @@ def getLink(article):
     return short_url
 
 def getGoogleNews(userName, googleNews, query):
-    googleNews = searchNews(googleNews, query) # search for news related to the query
-    articleList = get5Results(googleNews) # get the top 5 relevant news articles from the results
-    displayResults(articleList, query) # display the 5 articles
-    askToRead(userName, articleList, query) # ask if the user wants to read any of them. If no, returns False. If yes, the article is displayed and returns True.
-    clearSearch(googleNews)
-    print('IMDBot: Ok. What else would you like to know?')
-    return googleNews
+    try:
+        googleNews = searchNews(googleNews, query) # search for news related to the query
+        articleList = get5Results(googleNews) # get the top 5 relevant news articles from the results
+        displayResults(articleList, query) # display the 5 articles
+        askToRead(userName, articleList, query) # ask if the user wants to read any of them. If no, returns False. If yes, the article is displayed and returns True.
+        clearSearch(googleNews)
+        print('IMDBot: Ok. What else would you like to know?')
+        return googleNews
+    except:
+        clearSearch(googleNews)
+        print('IMDBot: Uh oh. Something went wrong and I can\'t continue to look for news.')
+        print('IMDBot: What else can I help you with?')
 
 # TESTING ONLY ---------------------------------------------
 # gNews = enableGoogleNews()
