@@ -14,7 +14,7 @@ def findCompany(movie): # Find the companies that produce the given movie
             print("IMDBot: There is no production company for this movie")
             return 'No Production'
         else:
-            print("IMDBot: The production company is: " + companies[0]['name'])
+            print("IMDBot: The main production company is " + companies[0]['name'])
             return companies[0]['name']
 
         return companies[0]['name'] # return the main company of the movie production
@@ -38,14 +38,18 @@ def isProduction(company, movie): # Check if this company produced a certain mov
         print(f'IMDBot: Uh oh. Something went wrong.')
         return 'Exception'
                 
-def findMovieForCompany(userName):
+def findMovieForCompany(userName, query_movie_name):
     movie = ""
     movieFound = False
     while movieFound == False:
-        print('IMDBot: Which movie do you have in mind?')
-        search = input(f'{userName}: ')
+        search = ''
+        if(query_movie_name == ''):
+            print('IMDBot: Which movie do you have in mind?')
+            search = input(f'{userName}: ')
+        else:
+            search = query_movie_name
         searchID = 0 #an index to go through the list to confirm the movie the user is talking about
-        print('IMDBot: Ok! I\'m searching for the movie ...') # Serves to provide a buffer while the query is sent
+        print(f'IMDBot: First, I need to find and confirm the movie you\'re talking about...') # Serves to provide a buffer while the query is sent
         movieNameCorrect = False
         while movieNameCorrect == False:
             try:
