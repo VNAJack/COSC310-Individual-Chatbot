@@ -4,8 +4,9 @@
 
 Per the Final Project description, Assignment 3 was imported to this repository for the purpose of individual work.
 
-    NOTE FOR THE TA:
-    To identify sections that were added for this project, I added the note "(Final Project)" to the updated and added areas of this README file so that the TA can Ctrl+F to easily find all the areas that were updated or added for this individual assignment. These notes are also included in the Table of Contents to assist with navigation.
+**NOTE FOR THE TA:**
+
+>To identify sections that were added for this project, I added the note "(Final Project)" to the updated and added areas of this README file so that the TA can Ctrl+F to easily find all the areas that were updated or added for this individual assignment. These notes are also included in the Table of Contents to assist with navigation.
 
 Other parts of the project were changed for this project for the purpose of integration, smoother conversation, and error handling and are documented within the code's comments.
 
