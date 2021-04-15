@@ -123,7 +123,22 @@ def trainSpacy(): # This is called in ner.py only. DO NOT call it elsewhere.
         ("Disable Twitter", {"entities": []}),
         ("What is Kristen Bell's latest tweet?", {"entities": [(8, 20, "PERSON")]}),
         ("What is Jonathon Groff's latest tweet?", {"entities": [(8, 22, "PERSON")]}),
-        ("What did Josh Gad tweet last?", {"entities": [(9, 17, "PERSON")]})
+        ("What did Josh Gad tweet last?", {"entities": [(9, 17, "PERSON")]}),
+        ("What's the latest news?", {"entities": []}),
+        ("What is the latest news?", {"entities": []}),
+        ("What's the latest news about it?", {"entities": []}),
+        ("What's the latest news about her?", {"entities": []}),
+        ("What's the latest news about him?", {"entities": []}),
+        ("What's the latest news about them?", {"entities": []}),
+        ("What's the latest news about the movie?", {"entities": []}),
+        ("What's the latest news about Florence Pugh?", {"entities": [(29, 42, "PERSON")]}),
+        ("What's the latest news about Scarlett Johansson in Black Widow?", {"entities": [(29, 47, "PERSON"), (51, 62, "WORK_OF_ART")]}),
+        ("What's the latest news about the movie Spider-Man: No Way Home?", {"entities": [(39, 62, "WORK_OF_ART")]}),
+        ("What's the latest news about the movie The Matrix 4?", {"entities": [(39, 51, "WORK_OF_ART")]}),
+        ("What's the latest news about the company Buffalo FilmWorks?", {"entities": [(41, 58, "ORG")]}),
+        ("What's the latest news about the company Paramount Pictures?", {"entities": [(41, 59, "ORG")]}),
+        ("What's the latest news about Simu Liu in Shang-Chi and the Legend of the Ten Rings produced by Walt Disney Pictures?", {"entities": [(29, 37, "PERSON"), (41, 82, "WORK_OF_ART"), (95, 115, "ORG")]}),
+        ("What's the latest news about Angelina Jolie in Eternals produced by Marvel Studios?", {"entities": [(29, 43, "PERSON"), (47, 55, "WORK_OF_ART"), (68, 82, "ORG")]})
     ]
 
     # Use the internal training API and run randomized training loop

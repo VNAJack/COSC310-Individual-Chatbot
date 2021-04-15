@@ -18,7 +18,7 @@ def findMovie(userName): # Finds the movie requested by the user
 
 def searchForMovie(userName, search):
     searchID = 0 #an index to go through the list to confirm the movie the user is talking about
-    print('IMDBot: Ok! Let me see if I can find it...') # Serves to provide a buffer while the query is sent
+    print('IMDBot: Ok! Let me see if I can find the movie...') # Serves to provide a buffer while the query is sent
     while True:
         try:
             if (searchID > 0 and searchID % 3 == 0 and askToContinue(userName) == False):
@@ -161,7 +161,10 @@ def whoPlayed(twAPI, userName, oldMovie, charName, newMovie_name):
             actor = movie['cast'][castID]
             if (str(character).lower().find(charName.lower()) != -1): #compares the role and the string in lowercase to compare
                 print(f'IMDBot: {character} is played by {actor}')
-                tw.printLatestTweet(twAPI, actor, userName) # Twitter API - search for last tweet by that actor about this movie
+                if(twAPI != ''):
+                    tw.printLatestTweet(twAPI, actor, userName) # Twitter API - search for last tweet by that actor about this movie
+                else:
+                    print(f'IMDBot: What else would you like to know?')
                 return actor
             else:
                 castID += 1

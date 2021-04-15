@@ -1,4 +1,4 @@
-# TODO: README pip install tweepy
+# Twitter API - Pull the latest tweets from a famous person, parse that tweet, and integrate relevant information into your conversation
 
 import synonyms as sy
 import tweepy

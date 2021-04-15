@@ -8,6 +8,7 @@ import spellinghandler as sp
 import synonyms as sy
 import postagging as pt
 import twitter as tw
+import googleNews as gn
 from chatterbot import ChatBot
 
 bot = ChatBot('MovieBot')
@@ -22,8 +23,11 @@ print(f'I am a bot who knows all about movies. ') #concatenates to "IMDBot: That
 # bot asks user for permission and assistance with authenticating APIs. User can decline.
 twAPI = tw.enableTwitter(userName) # if enabled, twAPI is an object, otherwise twAPI = '' 
 
+# enable Google news
+googleNews = gn.enableGoogleNews()
+
 # Once APIs are done, can use the bot as intended
-print(f'IMDBot: Now that everything is set up, how can I help you today? ')
+print(f'IMDBot: Now, how can I help you today? ')
 while True:
     try:
         raw_user_input = input(f'{userName}: ') # collect user input for this iteration
@@ -40,8 +44,13 @@ while True:
         for i in range (len(user_input)):
             user_input[i] = user_input[i].lower()
         
+        # User can change theirname
+        if (sy.findSyns(user_input, 'change') == 0 and ('name' in user_input or 'username' in user_input)):
+            userName = u.checkName(userName)
+            print('How can I help you?') #concatenates to "IMDBot: That's a cool name, userName! "
+
         # Enable Twitter. If Twitter was not authorized on startup, but the user changed their mind and wants to authorize Twitter
-        if(('enable' in user_input) and ('twitter' in user_input) and (twAPI == '')):
+        elif(('enable' in user_input) and ('twitter' in user_input) and (twAPI == '')):
             twAPI = tw.enableTwitter(userName)
             print(f'IMDBot: Now, how can I help?')
 
@@ -89,12 +98,56 @@ while True:
                     tw.printLatestTweet(twAPI, person_name, userName) # prints the latest tweet and asks user if they want to like it if they haven't already
                 else: # no person or name, so can't look up the latest tweet without knowing the person
                     print(f'IMDBot: I\'m sorry. I don\'t know who you\'re asking about.')
-
-        # User can change theitweet_objrname
-        elif (sy.findSyns(user_input, 'change') == 0 and ('name' in user_input or 'username' in user_input)):
-            userName = u.checkName(userName)
-            print('How can I help you?') #concatenates to "IMDBot: That's a cool name, userName! "
         
+        # What is the production company of a movie
+        elif (('production' and 'company') in user_input or sy.findSyns(user_input, 'companies') == 0):
+            if movie_name != '':
+                movie = c.findMovieForCompany(userName, movie_name)
+                company = c.findCompany(movie)
+                print('IMDBot: What else would you like to know? :)')
+            elif 'movie' in locals():
+                company = c.findCompany(movie) # list the production companies of the movie asked
+                print('IMDBot: What else would you like to know? :)')
+            else:
+                print('IMDBot: Sorry. I need to know which movie you\'re asking about first. Please ask me again and specify the movie :)')
+            
+        # List other movies that the production company produced
+        elif ('other' in user_input and sy.findSyns(user_input, 'produce')):
+            otherMovie = c.findMovieForCompany(userName, '')
+            c.isProduction(company_name, otherMovie)
+            print("IMDBot: What else would you like to know?")
+        # Recent news about movie or person
+        elif (sy.findSyns(user_input, 'news') == 0) or (('what' in user_input or 'what\'s' in user_input) and sy.findSyns(user_input, 'new') == 0):
+            query = []
+            if person_name != '': query.append(person_name)     # if user specified a person (person_name is a found entity), add it to the query
+            if movie_name != '': query.append(movie_name)       # if user specified a movie (movie_name is a found entity), add it to the query
+            if company_name != '': query.append(company_name)   # if user specified a company (company_name is a found entity), add it to the query
+            if len(query) >= 1: # if at least one of the above was added to the query
+                query = " and ".join(query) # join them with the word ' and '
+            elif ('him' in user_input or 'her' in user_input or 'them' in user_input) and ('person' in locals()): # no entities, but a person was previously specified and the user asked about 'him, her or them'
+                query = person['name'] # make the person's name the query
+            elif 'movie' in locals() and 'company' not in locals(): # no entities, no person, but a movie was previously specified
+                query = movie['title'] # make the movie title the query
+            elif 'movie' not in locals() and 'company' in locals(): # no entities, no person, no movie, but a company was previously specified
+                query = company # make the company name the query
+            elif 'movie' in locals() and 'company' in locals(): # if both a movie AND a company were previously specified, clarify what the user wants to search for
+                print(f"IMDBot: Before I search for news, I just want to clarify... Were you asking about the movie '{movie['title']}' or the production company '{company}'?")
+                answer = input(f'{userName}: ')
+                if(answer.find('movie') != -1): # this can be problematic if the user uses the actual name of the movie instead of the word 'movie'
+                    query = movie['title'] # make the movie title the query
+                elif(answer.find('company') != -1): # this can be problematic if the user uses the actual name of the company instead of the word 'company'
+                    query = company # make the company name the query
+                elif(answer.find('both') != -1): # this can be problematic if the user uses the actual names of both the movie and company instead of the word 'both'
+                    query = movie['title'] + ' and ' + company # make both the movie and company names the query
+                else:
+                    query = '' # if the user doesn't say 'movie' or 'company' then leave the query blank
+            else:
+                query = ''
+            if query != '': # if the query isn't blank
+                gn.getGoogleNews(userName, googleNews, query) # search with the query
+            else: # if the query is blank
+                print('IMDBot: Sorry, I don\'t know which person, movie, or production company you want me to look for news about. Please try asking me again in another way.')
+
         # List other movies the person has worked on
         elif('what' in user_input and ('other' in user_input or 'another' in user_input)) :
             #takes in user input and calls otherRoles() from person.py
@@ -154,25 +207,13 @@ while True:
             print("IMDBot: What else would you like to know?")
         
         # Check if a person was in a movie
-        elif((('check' and 'if' and 'in') in user_input) and (person_name != '') and (movie_name != '')):
+        elif(('check' in user_input and 'if' in user_input and 'in' in user_input) and (person_name != '') and (movie_name != '')):
             #Check if a {actor} is in {movie}
             if 'movie' in locals():
                 p.checker(userName, person_name, movie, movie_name)
             else:
                 p.checker(userName, person_name, '', movie_name)
             print('IMDBot: What else can I help you with?')
-        
-        # What is the production company of a movie
-        elif (('production' and 'company') in user_input or sy.findSyns(user_input, 'companies') == 0):
-            print("IMDBot: Okay, let me search the production companies for you!") # buffer for searching companies
-            company = c.findCompany(movie) # list the production companies of the movie asked
-            print('IMDBot: What else would you like to know about the company? :)')
-
-        # List other movies that the production company produced
-        elif ('other' in user_input and sy.findSyns(user_input, 'produce')):
-            otherMovie = c.findMovieForCompany(userName)
-            c.isProduction(company_name, otherMovie)
-            print("IMDBot: What else would you like to know?")
             
         # What is the runtime of a movie
         elif ((('how' and 'long') in user_input) or ('runtime' in user_input or sy.findSyns(user_input, 'length') == 0)): # Moved to the bottom because it can get called by accident if near top
