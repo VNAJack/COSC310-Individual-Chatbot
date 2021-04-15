@@ -176,20 +176,20 @@ To see the class structure of the IMDb integration and natural language processi
 
 ### Testing
 
-#### test_IMDBot.py
+#### [test_IMDBot.py](test_IMDBot.py)
 - Runs all the unittest functions to ensure proper code functionality.
 - Gives the bot example inputs to test if it can understand commands as natural language.
 
 ### GUI
 
-#### gui.py
+#### [gui.py](gui.py)
 
 - Builds and runs a GUI container for chatbot interaction
 - This GUI is more of a proof of concept, as time constraints prevented implementation to the main runtime.
 - It can be run to see what it would look like, but chatbot interaction is nonfunctional
 
 ### Twitter API
-#### twitter.py
+#### [twitter.py](twitter.py)
 *(Final Project)*
 - Before the Twitter API can be used, `enableTwitter()` is called on startup to ask for the user's permission to connect to their Twitter account.
   - If the user denies this request, then the Twitter API functionality is disabled
@@ -208,7 +208,7 @@ To see the class structure of the IMDb integration and natural language processi
 
 ### Google News
 
-#### googleNews.py
+#### [googleNews.py](googleNews.py)
 *(Final Project)*
 - Upon program startup, Google News is initialized with English as the language setting via `enableGoogleNews()`
 - Functions:
