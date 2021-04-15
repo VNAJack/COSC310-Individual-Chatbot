@@ -159,8 +159,4 @@ def getGoogleNews(userName, googleNews, query):
         clearSearch(googleNews)
         print('IMDBot: Uh oh. Something went wrong and I can\'t continue to look for news.')
         print('IMDBot: What else can I help you with?')
-
-# TESTING ONLY ---------------------------------------------
-# gNews = enableGoogleNews()
-# query = input("Search for: ")
-# getGoogleNews("Veronica", gNews, query)
+        return googleNews

@@ -116,6 +116,7 @@ while True:
             otherMovie = c.findMovieForCompany(userName, '')
             c.isProduction(company_name, otherMovie)
             print("IMDBot: What else would you like to know?")
+        
         # Recent news about movie or person
         elif (sy.findSyns(user_input, 'news') == 0) or (('what' in user_input or 'what\'s' in user_input) and sy.findSyns(user_input, 'new') == 0):
             query = []
