@@ -5,8 +5,8 @@ import tweepy
 import webbrowser
 
 # Authentication Info
-consumer_key = 'wdyVpaa5w3aIcSonL0hOR0sHj'
-consumer_secret = 'ciA39f1wV2w3rSfab2gfiiuRujbBuTCWTHCjkW9iZnnLHz3Fa3'
+consumer_key = ''
+consumer_secret = ''
 
 # Runs upon startup AND when user asks to "Enable Twitter" the bot will ask user for permission to use Twitter
 def enableTwitter(userName): 
@@ -18,7 +18,8 @@ def enableTwitter(userName):
         checkArr = sy.getArray(check, []) # Turn user input into array for synonym checking
         if (checkFirst == 'y' or sy.findSyns(checkArr, 'yes') == 0): # If user said yes
             print('IMDBot: Great! ', end='')
-            return authenticateTwitter() # call method to authenticate
+            api = authenticateTwitter() # call method to authenticate
+            return api
         elif (checkFirst == 'n' or sy.findSyns(checkArr, 'no') == 0): # If user said no
             print('IMDBot: Ok, I will not use Twitter. If you change your mind, please ask me to \"Enable Twitter\" ') # acknowledge user choice
             return ''
@@ -27,13 +28,9 @@ def enableTwitter(userName):
 
 # If user permits use of Twitter, then the program needs to go through the authentication process, which requires user assistance and an Internet connection
 def authenticateTwitter():
-    count = 0
-    while True:
-        count += 1 # counter so that the user is not stuck in a loop forever
-        # authorization of consumer key and consumer secret
-        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        redirect_url = auth.get_authorization_url()
-        webbrowser.open(redirect_url)
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret) # authorization of consumer key and consumer secret
+        redirect_url = auth.get_authorization_url() # gets a URL
+        webbrowser.open(redirect_url) # displays web page explaining the permission in more detail
         print('In the new browser window, please read the permission details and then click \'Authorize App\'. ') # concatenates to last message. "Great!" or "Let's try again"
         user_pin_input = input("IMDBot: What is the PIN value? ")
         try:
@@ -43,12 +40,8 @@ def authenticateTwitter():
             print('IMDBot: If you change your mind, you can ask me to \'Disable Twitter\' ')
             return api
         except:
-            if(count == 3): # Only a few attempts to authenticate Twitter so that user is not stuck in loop if Twitter auth doesn't work.
-                print('IMDBot: It looks like Twitter won\'t work today. That\'s ok! Let\'s move on :) ')
-                return ''
-            else:
-                print('IMDBot: Something went wrong. Let\'s try again. ', end='')
-                continue
+            print('IMDBot: A PIN was not entered. If you want to try again please ask me to \'enable Twitter\'.')
+            return ''
 
 # Uses the actor's name to find the twitter account and tell the user which account the bot found.
 def findUser(api, query_person_name):
@@ -78,7 +71,7 @@ def askToLikeTweet(api, tweet_obj_id, userName):
                 if (checkFirst == 'y' or sy.findSyns(checkArr, 'yes') == 0): # if user said yes
                     api.create_favorite(tweet_obj_id) # Tweepy's method to like a Tweet
                     if api.get_status(tweet_obj_id).favorited: # Check using the tweet ID if it is now liked
-                        print('Cool! You liked the tweet!') # Acknowledge if it is
+                        print('IMDBot: Cool! You liked the tweet!') # Acknowledge if it is
                     else:
                         print('IMDBot: Woops! Something went wrong, so I could not like the tweet.')
                     break
