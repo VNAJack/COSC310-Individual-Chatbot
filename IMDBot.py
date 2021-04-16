@@ -25,6 +25,7 @@ twAPI = tw.enableTwitter(userName) # if enabled, twAPI is an object, otherwise t
 
 # enable Google news
 googleNews = gn.enableGoogleNews()
+print(f'I can also look up the latest news about people, movies, and production companies using Google News. This does not require any permissions!')
 
 # Once APIs are done, can use the bot as intended
 print(f'IMDBot: Now, how can I help you today? ')
@@ -44,8 +45,30 @@ while True:
         for i in range (len(user_input)):
             user_input[i] = user_input[i].lower()
         
+        if len(user_input) == 1 and 'help' in user_input:
+            print('IMDBot: You said \'help\'. I\'m IMDBot. A chatbot that knows all about movies! :) ')
+            print('IMDBot: Here\'s a list of some of the things you can ask me to do:')
+            print(f'\t - change your name')
+            print(f'\t - enable or disable Twitter')
+            print(f'\t - find a movie')
+            print(f'\t - tell you how long a movie is (the runtime)')
+            print(f'\t - give you the plot or summary of a movie')
+            print(f'\t - find the director of a movie')
+            print(f'\t - list characters in a movie you previously searched for')
+            print(f'\t - find which actor played a certain character in a movie')
+            print(f'\t - find the latest movie an actor worked on')
+            print(f'\t - list other movies an actor has worked on')
+            print(f'\t - tell you what an actor\'s birthday, birth place, and biography are')
+            print(f'\t - check if an actor was in a movie')
+            print(f'\t - find out if a person worked on or had a role in a movie')
+            print(f'\t - find the production company of a movie')
+            print(f'\t - find what other movies that company produced')
+            print(f'\t - display the latest tweet by an actor or director')
+            print(f'\t - find five recent news articles about an actor, director, movie, and/or production company')
+            print('IMDBot: If you want to end the conversation, you can simply say \'Goodbye\'')
+
         # User can change theirname
-        if (sy.findSyns(user_input, 'change') == 0 and ('name' in user_input or 'username' in user_input)):
+        elif (sy.findSyns(user_input, 'change') == 0 and ('name' in user_input or 'username' in user_input)):
             userName = u.checkName(userName)
             print('How can I help you?') #concatenates to "IMDBot: That's a cool name, userName! "
 
@@ -184,7 +207,7 @@ while True:
             print("IMDBot: What else would you like to know?")
         
         # What is the last movie the person worked on
-        elif(sy.findSyns(user_input, 'latest') == 0 and sy.findSyns(user_input, 'movie') == 0):
+        elif(sy.findSyns(user_input, 'latest') == 0 or sy.findSyns(user_input, 'last') == 0 and sy.findSyns(user_input, 'movie') == 0):
             #Search for a latest movie by an actor
             print("IMDBot: Hmm... let me think...")
             if 'person' in locals():
