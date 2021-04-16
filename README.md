@@ -220,6 +220,12 @@ To see the class structure of the IMDb integration and natural language processi
     - `askToReadAnother()` prompts the user if they want to read another article. Recursion is used with `askToRead()` to continue the interaction until the user indicates they do not want to read another article.
   - `clearSearch()` is used after the user is done with the articles to delete the search results from the Google News object.
   - `getGoogleNews()` is the only function used in [IMDBot.py](#IMDBot.py). It calls the aformentioned functions and handles errors gracefully.
+- Natural language processing is incorporated so that IMDBot can better understand what the user is asking for news about.
+- The user can ask IMDBot for news in a variety of ways: 
+  - if the user already found a movie or company and asks for news about it
+  - if the user found both a movie and a company, IMDBot will verify which (or both) the user wants to search for
+  - if the user found an actor or director and asks for news about them
+  - if the user asks directly about one or a combination of actors, directors, movies, or production companies
 
 ## Future Considerations
 
