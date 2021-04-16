@@ -39,6 +39,7 @@ def trainSpacy(): # This is called in ner.py only. DO NOT call it elsewhere.
         ("Who played Obi-Wan Kenobi in Star Wars: Episode I - The Phantom Menace?", {"entities": [(11, 25, "PERSON"), (29, 70, "WORK_OF_ART")]}),
         ("Who played Yoda in Star Wars: Episode II - Attack of the Clones?", {"entities": [(11, 15, "PERSON"), (19, 63, "WORK_OF_ART")]}),
         ("Who played Supreme Chancellor Palpatine in Star Wars: Episode III - Revenge of the Sith?", {"entities": [(11, 39, "PERSON"), (43, 87, "WORK_OF_ART")]}),
+        ("I was wondering who plays Peter Parker in Spider-Man: Far From Home?", {"entities": [(26, 38, "PERSON"), (42, 67, "WORK_OF_ART")]}),
         ("who played Miles in that movie?", {"entities": [(11, 16, "PERSON")]}),
         ("who played Nash?", {"entities": [(11, 15, "PERSON")]}),
         ("who played Cobb?", {"entities": [(11, 15, "PERSON")]}),

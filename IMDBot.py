@@ -25,7 +25,7 @@ twAPI = tw.enableTwitter(userName) # if enabled, twAPI is an object, otherwise t
 
 # enable Google news
 googleNews = gn.enableGoogleNews()
-print(f'I can also look up the latest news about people, movies, and production companies using Google News. This does not require any permissions!')
+print(f'IMDBot: I can also look up the latest news about people, movies, and production companies using Google News. This does not require any permissions!')
 
 # Once APIs are done, can use the bot as intended
 print(f'IMDBot: Now, how can I help you today? ')
@@ -73,12 +73,12 @@ while True:
             print('How can I help you?') #concatenates to "IMDBot: That's a cool name, userName! "
 
         # Enable Twitter. If Twitter was not authorized on startup, but the user changed their mind and wants to authorize Twitter
-        elif(('enable' in user_input) and ('twitter' in user_input) and (twAPI == '')):
+        elif(('enable' in user_input) and (('twitter' in user_input) or raw_user_input.find('Twitter') != -1) and (twAPI == '')):
             twAPI = tw.enableTwitter(userName)
-            print(f'IMDBot: Now, how can I help?')
+            print('IMDBot: What else would you like to know?')
 
         # Disable Twitter. Twitter is already enabled, but the user wants to disable Twitter
-        if(('disable' in user_input) and ('twitter' in user_input) and (twAPI != '')):
+        elif(('disable' in user_input) and ('twitter' in user_input) and (twAPI != '')):
             twAPI = '' # need the API object to do anything. Without it, no Twitter API actions can be performed
             print('IMDBot: Twitter is now disabled. If you would like to re-enable it, please ask me to \'Enable Twitter\'')
         

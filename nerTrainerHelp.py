@@ -2,20 +2,20 @@
 # Please follow the 4 steps below to add your test case
 
 # Step 1: Put your sentence here
-sentence = "What's the latest news about Angelina Jolie in Eternals produced by Marvel Studios?"
+sentence = "I was wondering who plays Peter Parker in Spider-Man: Far From Home?"
 
 # Step 2: put the EXACT spelling of the PERSON, MOVIE, ORGANIZATION from your sentence below
-person = "Angelina Jolie" # Put the person name here
+person = "Peter Parker" # Put the person name here
 pLen = len(person)
 pFirst = sentence.find(person)
 pLast = pFirst + pLen
 
-movie = "Eternals" # Put the movie name here
+movie = "Spider-Man: Far From Home" # Put the movie name here
 mLen = len(movie)
 mFirst = sentence.find(movie)
 mLast = mFirst + mLen
 
-org = "Marvel Studios" # Put the organization name here
+org = "" # Put the organization name here
 oLen = len(org)
 oFirst = sentence.find(org)
 oLast = oFirst + oLen
